@@ -23,25 +23,25 @@ const holdings = [
   {
     name: 'BTC',
     symbol: 'BTCGBP',
-    amount: 0.12017975,
+    amount: 0.1205314,
     cost: 3901.9
   },
   {
     name: 'ETH',
     symbol: 'ETHGBP',
-    amount: 1.57598066,
+    amount: 1.58123912,
     cost: 1675.91
   },
   {
     name: 'DOT',
     symbol: 'DOTGBP',
-    amount: 8.26104753,
+    amount: 8.29535087,
     cost: 192.60
   },
   {
     name: 'LTC',
     symbol: 'LTCGBP',
-    amount: 0.72267813,
+    amount: 0.72508944,
     cost: 117.36
   },
   {
@@ -53,7 +53,7 @@ const holdings = [
   {
     name: 'AAVE',
     symbol: 'AAVEGBP',
-    amount: 0.77954762,
+    amount: 0.78465976,
     cost: 240
   }
 ]
@@ -107,7 +107,7 @@ export default function Coins ({ prices, timestamp }) {
                 const perc = Number(100 * ((value / holding.cost) - 1)).toFixed(0)
                 return (
                   <tr key={holding.name}>
-                    <td>{holding.name}</td>
+                    <th>{holding.name}</th>
                     <td>{formatValue(holding.amount)}</td>
                     <td>{formatValue(prices[holding.symbol])}</td>
                     <td>{formatSterling(holding.cost)}</td>
