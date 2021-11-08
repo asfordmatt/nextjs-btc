@@ -10,6 +10,7 @@ export async function getServerSideProps (context) {
   const client = new Binance()
   const prices = await client.prices()
   prices['AAVEGBP'] = '' + prices['AAVEBTC'] * prices['BTCGBP']
+  prices['XLMGBP'] = '' + prices['XLMBTC'] * prices['BTCGBP']
   // console.log(prices['AAVEGBP'])
   return {
     props: {
@@ -55,6 +56,12 @@ const holdings = [
     symbol: 'AAVEGBP',
     amount: 0.78465976,
     cost: 240
+  },
+  {
+    name: 'XLM',
+    symbol: 'XLMGBP',
+    amount: 703.2686344,
+    cost: 200
   }
 ]
 
@@ -62,8 +69,10 @@ const formatSterling = pounds => pounds ? ('£' + pounds.toFixed(0)) : ''
 
 const formatValue = value => {
   const v = Number(value)
-  if (v > 10) {
+  if (v > 100) {
     return v.toFixed(0)
+  } else if (v > 10) {
+    return v.toFixed(1)
   } else {
     return v.toFixed(2)
   }
@@ -95,7 +104,7 @@ export default function Coins ({ prices, timestamp }) {
         <p>{timestamp}</p>
         <table className={styles.cointable}>
           <thead>
-            <tr><th>Coin</th><th>Quantity</th><th>Price</th><th>Cost</th><th>Value</th><th>P/L</th><th>%</th></tr>
+            <tr><th>Coin</th><th>Quantity</th><th>Price</th><th>Cost</th><th>Value</th><th>P/L</th></tr>
           </thead>
           <tbody>
             {
@@ -112,8 +121,8 @@ export default function Coins ({ prices, timestamp }) {
                     <td>{formatValue(prices[holding.symbol])}</td>
                     <td>{formatSterling(holding.cost)}</td>
                     <td>{formatSterling(value)}</td>
-                    <td className={(profit >= 0) ? styles.up : styles.down}>{formatSterling(profit)}</td>
-                    <td className={(profit >= 0) ? styles.up : styles.down}>{(perc > 0) ? '+' : ''}{perc}%</td>
+                    <td className={(profit >= 0) ? styles.up : styles.down}>{formatSterling(profit)}<br />
+                    {(perc > 0) ? '+' : ''}{perc}%</td>
                   </tr>
                 )
               })
@@ -122,8 +131,8 @@ export default function Coins ({ prices, timestamp }) {
               <th colSpan={3}>Totals:</th>
               <th>{formatSterling(totalCost)}</th>
               <th>{formatSterling(totalValue)}</th>
-              <th className={(totalValue >= totalCost) ? styles.up : styles.down}>{formatSterling(totalValue - totalCost)}</th>
-              <th className={(totalValue >= totalCost) ? styles.up : styles.down}>{Number(100 * ((totalValue / totalCost) - 1)).toFixed(0)}%</th>
+              <th className={(totalValue >= totalCost) ? styles.up : styles.down}>{formatSterling(totalValue - totalCost)}<br />
+             {Number(100 * ((totalValue / totalCost) - 1)).toFixed(0)}%</th>
             </tr>
           </tbody>
         </table>
