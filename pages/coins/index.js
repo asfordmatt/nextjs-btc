@@ -60,7 +60,7 @@ const holdings = [
   {
     name: 'XLM',
     symbol: 'XLMGBP',
-    amount: 7035.0088717,
+    amount: 705.0088717,
     cost: 200
   }
 ]
