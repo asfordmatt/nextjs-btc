@@ -25,13 +25,13 @@ const holdings = [
     name: 'BTC',
     symbol: 'BTCGBP',
     amount: 0.13811785,
-    cost: 4351.9
+    cost: 4501.9
   },
   {
     name: 'ETH',
     symbol: 'ETHGBP',
     amount: 1.70166033,
-    cost: 1825.91
+    cost: 1975.91
   },
   {
     name: 'DOT',
