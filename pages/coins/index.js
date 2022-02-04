@@ -9,9 +9,11 @@ import Binance from 'binance-api-node'
 export async function getServerSideProps (context) {
   const client = new Binance()
   const prices = await client.prices()
+  // manually add missing GBP pairs
   prices['AAVEGBP'] = '' + prices['AAVEBTC'] * prices['BTCGBP']
   prices['XLMGBP'] = '' + prices['XLMBTC'] * prices['BTCGBP']
-  // console.log(prices['AAVEGBP'])
+  prices['EURGBP'] = '' + (prices['BTCGBP'] / prices['BTCEUR'])
+  // console.log(prices['EURGBP'])
   return {
     props: {
       prices,
@@ -24,25 +26,25 @@ const holdings = [
   {
     name: 'BTC',
     symbol: 'BTCGBP',
-    amount: 0.13811785,
+    amount: 0.13852913,
     cost: 4501.9
   },
   {
     name: 'ETH',
     symbol: 'ETHGBP',
-    amount: 1.70166033,
+    amount: 1.70758,
     cost: 1975.91
   },
   {
     name: 'DOT',
     symbol: 'DOTGBP',
-    amount: 8.36326745,
+    amount: 8.39799,
     cost: 192.60
   },
   {
     name: 'LTC',
     symbol: 'LTCGBP',
-    amount: 0.72917465,
+    amount: 0.731,
     cost: 117.36
   },
   {
@@ -54,14 +56,20 @@ const holdings = [
   {
     name: 'AAVE',
     symbol: 'AAVEGBP',
-    amount: 0.79174169,
+    amount: 0.795,
     cost: 240
   },
   {
     name: 'XLM',
     symbol: 'XLMGBP',
-    amount: 707.1446819,
+    amount: 709.2719,
     cost: 200
+  },
+  {
+    name: 'CEUR',
+    symbol: 'EURGBP',
+    amount: 587,
+    cost: 500
   }
 ]
 
