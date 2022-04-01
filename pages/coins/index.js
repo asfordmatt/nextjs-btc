@@ -26,25 +26,25 @@ const holdings = [
   {
     name: 'BTC',
     symbol: 'BTCGBP',
-    amount: 0.138905,
+    amount: 0.13928,
     cost: 4501.9
   },
   {
     name: 'ETH',
     symbol: 'ETHGBP',
-    amount: 1.71298,
+    amount: 1.71859,
     cost: 1975.91
   },
   {
     name: 'DOT',
     symbol: 'DOTGBP',
-    amount: 8.42948,
+    amount: 8.458277,
     cost: 192.60
   },
   {
     name: 'LTC',
     symbol: 'LTCGBP',
-    amount: 0.73266,
+    amount: 0.7345,
     cost: 117.36
   },
   {
@@ -56,19 +56,19 @@ const holdings = [
   {
     name: 'AAVE',
     symbol: 'AAVEGBP',
-    amount: 0.798,
+    amount: 0.8007,
     cost: 240
   },
   {
     name: 'XLM',
     symbol: 'XLMGBP',
-    amount: 711.1989,
+    amount: 713.02,
     cost: 200
   },
   {
     name: 'CEUR',
     symbol: 'EURGBP',
-    amount: 593.73,
+    amount: 611.26,
     cost: 500
   }
 ]
