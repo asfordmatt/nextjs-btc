@@ -5,7 +5,8 @@ const NIGHT_RATE = 20.23
 
 const URL_IMPORT = 'https://api.octopus.energy/v1/electricity-meter-points/2000055440440/meters/21L3886489/consumption/'
 const URL_EXPORT = 'https://api.octopus.energy/v1/electricity-meter-points/2000060049088/meters/21L3886489/consumption/'
-const CREDS = btoa("sk_live_nafk2UDcHE1cAWroaIFwWOoX:")
+const CREDS = Buffer.from("sk_live_nafk2UDcHE1cAWroaIFwWOoX:").toString('base64')
+
 const AUTH = {
   "Authorization": `Basic ${CREDS}`
 }
