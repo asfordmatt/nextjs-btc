@@ -13,7 +13,7 @@ const SET1_IS = [
   "Núll", "Einn", "Tveir", "Þrír", "Fjórir", "Fimm", "Sex", "Sjö", "Átta", "Níu", "Tíu"
 ]
 
-const NUM_ANSWERS = 4
+const NUM_ANSWERS = 6
 
 export default function Words ({ }) {
   const [wordIndex, setWordIndex] = useState(-1)
@@ -58,7 +58,7 @@ export default function Words ({ }) {
   const answers = useMemo(() => getAnswers(wordIndex), [wordIndex])
 
   return (
-    <>
+    <div className={styles.main}>
       <h1>Words</h1>
       {
         (wordIndex >= 0) && (
@@ -81,11 +81,11 @@ export default function Words ({ }) {
         )
       }
       <div>
-        <button onClick={() => {
+        <button className={styles.next} onClick={() => {
           setResult('')
           setWordIndex(chooseWord())
         }}>Next</button>
       </div>
-    </>
+    </div>
   )
 }
