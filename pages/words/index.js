@@ -1,17 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
-const SET1_EN = ["Good day", "Goodbye", "Thanks", "Coffee", "Tea", "Water", "Waterfall"]
-const SET1_IS = ["Góðan daginn", "Bless", "Takk", "Kaffi", "Te", "Vatn", "Foss"]
+import styles from './Words.module.css'
+
+const SET1_EN = [
+  "Good day", "Goodbye", "Thanks", "Coffee", "Tea", "Water", "Waterfall", "Yes", "No",
+  "Beer", "Wine", "Bread", "Meat", "Fish", "Soup", "Ice cream",
+  "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"
+]
+const SET1_IS = [
+  "Góðan daginn", "Bless", "Takk", "Kaffi", "Te", "Vatn", "Foss", "Já", "Nei",
+  "Bjór", "Vin", "Brauð", "Kjöt", "Fiskur", "Súpa", "Ís",
+  "Núll", "Einn", "Tveir", "Þrír", "Fjórir", "Fimm", "Sex", "Sjö", "Átta", "Níu", "Tíu"
+]
 
 const NUM_ANSWERS = 4
 
 export default function Words ({ }) {
   const [wordIndex, setWordIndex] = useState(-1)
+  const [result, setResult] = useState('')
+
+  const chooseWord = () => {
+    const pick = Math.floor(Math.random() * SET1_EN.length)
+    console.log('pick', pick)
+    return pick
+  }
 
   useEffect(() => {
-    const pick = Math.floor(Math.random() * SET1_EN.length)
-    console.log(pick)
-    setWordIndex(pick)
+    setWordIndex(chooseWord())
   }, [])
 
   const shuffle = arr => {
@@ -35,23 +50,42 @@ export default function Words ({ }) {
     return full
   }
 
+  const handleClick = correct => {
+    console.log('handleClick', correct)
+    setResult(correct)
+  }
+  
+  const answers = useMemo(() => getAnswers(wordIndex), [wordIndex])
+
   return (
     <>
       <h1>Words</h1>
       {
         (wordIndex >= 0) && (
           <>
-            {
-              SET1_IS[wordIndex]
-            }
-            <ul>
+            <span className={styles.question}>{SET1_IS[wordIndex]}</span>
+            <div className={styles.answerBox}>
               {
-                getAnswers(wordIndex).map(answer => <li key={answer}>{answer}</li>)
+                answers.map(answer => <button className={styles.answer} onClick={() => handleClick(answer === SET1_EN[wordIndex])} key={answer}>{answer}</button>)
               }
-            </ul>
+            </div>
+            <div className={styles.result}>
+              {
+                (result === true) && (<span>Correct! 😊</span>)
+              }
+              {
+                (result === false) && (<span>Wrong 😥</span>)
+              }
+            </div>
           </>
         )
       }
+      <div>
+        <button onClick={() => {
+          setResult('')
+          setWordIndex(chooseWord())
+        }}>Next</button>
+      </div>
     </>
   )
 }

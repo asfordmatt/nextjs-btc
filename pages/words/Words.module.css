@@ -1,0 +1,24 @@
+.question {
+  font-size: 20px;
+}
+
+.answerBox {
+  margin: 1rem;
+}
+
+.answer {
+  font-size: 16px;
+  width: 10rem;
+  height: 6rem;
+  /* border: 1px solid #eaeaea; */
+}
+
+.answer:hover {
+  background-color: yellow;
+}
+
+.result {
+  font-size: 20px;
+  margin: 1rem;
+  min-height: 30px;
+}
