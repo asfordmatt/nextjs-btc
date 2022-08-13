@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import cx from 'classnames'
 
 import styles from './Words.module.css'
 
@@ -18,10 +19,12 @@ const NUM_ANSWERS = 6
 export default function Words ({ }) {
   const [wordIndex, setWordIndex] = useState(-1)
   const [result, setResult] = useState('')
+  const [wrongAnswers, setWrongAnswers] = useState([])
+  const [correctAnswer, setCorrectAnswer] = useState('')
 
   const chooseWord = () => {
     const pick = Math.floor(Math.random() * SET1_EN.length)
-    console.log('pick', pick)
+    // console.log('pick', pick)
     return pick
   }
 
@@ -50,8 +53,14 @@ export default function Words ({ }) {
     return full
   }
 
-  const handleClick = correct => {
-    console.log('handleClick', correct)
+  const handleClick = (answer, index) => {
+    const correct = answer === SET1_EN[index]
+    // console.log('handleClick', correct)
+    if (correct) {
+      setCorrectAnswer(answer)
+    } else {
+      setWrongAnswers(wrongAnswers.concat(answer))
+    }
     setResult(correct)
   }
   
@@ -59,14 +68,21 @@ export default function Words ({ }) {
 
   return (
     <div className={styles.main}>
-      <h1>Words</h1>
+      <h1>🇮🇸<i>Learn Icelandic</i>🇮🇸</h1>
       {
         (wordIndex >= 0) && (
           <>
             <span className={styles.question}>{SET1_IS[wordIndex]}</span>
             <div className={styles.answerBox}>
               {
-                answers.map(answer => <button className={styles.answer} onClick={() => handleClick(answer === SET1_EN[wordIndex])} key={answer}>{answer}</button>)
+                answers.map(answer => <button className={cx(
+                                                styles.answer,
+                                                {
+                                                  [styles.wrong]: wrongAnswers.includes(answer),
+                                                  [styles.right]: correctAnswer === answer
+                                                })}
+                                              onClick={() => handleClick(answer, wordIndex)}
+                                              key={answer}>{answer}</button>)
               }
             </div>
             <div className={styles.result}>
@@ -83,6 +99,8 @@ export default function Words ({ }) {
       <div>
         <button className={styles.next} onClick={() => {
           setResult('')
+          setCorrectAnswer('')
+          setWrongAnswers([])
           setWordIndex(chooseWord())
         }}>Next</button>
       </div>

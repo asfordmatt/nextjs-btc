@@ -1,5 +1,5 @@
 .main {
-  max-width: 450;
+  max-width: 400px;
   text-align: center;
 }
 
@@ -14,12 +14,23 @@
 .answer {
   font-size: 16px;
   width: 10rem;
-  height: 6rem;
+  height: 7rem;
+  margin: 2px;
   /* border: 1px solid #eaeaea; */
 }
 
 .answer:hover {
   background-color: yellow;
+}
+
+.wrong,
+.wrong:hover {
+  background-color: crimson;
+}
+
+.right,
+.right:hover {
+  background-color: greenyellow;
 }
 
 .result {
@@ -30,7 +41,7 @@
 
 .next {
   font-size: 16px;
-  width: 10rem;
-  height: 6rem;
+  width: 8rem;
+  height: 5rem;
   float: right; 
 }
