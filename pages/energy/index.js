@@ -1,8 +1,11 @@
 import React from 'react'
 import Head from 'next/head'
 
-const DAY_RATE = 41.30
-const NIGHT_RATE = 14.13
+import styles from './energy.module.css'
+
+const DAY_RATE = 43.365
+const NIGHT_RATE = 14.8365
+const STANDING_CHARGE = 42.861
 
 const URL_IMPORT = 'https://api.octopus.energy/v1/electricity-meter-points/2000055440440/meters/21L3886489/consumption/'
 const URL_EXPORT = 'https://api.octopus.energy/v1/electricity-meter-points/2000060049088/meters/21L3886489/consumption/'
@@ -10,6 +13,19 @@ const CREDS = Buffer.from("sk_live_nafk2UDcHE1cAWroaIFwWOoX:").toString('base64'
 
 const AUTH = {
   "Authorization": `Basic ${CREDS}`
+}
+
+const isNight = ts => {
+  const start = new Date(ts)
+  const hour = start.getHours()
+  const min = start.getMinutes()
+  if (((hour === 0) && (min === 30))
+    || ((hour >= 1) && (hour < 4))
+    || ((hour === 4) && (min === 0))) {
+    // console.log('night')
+    return true
+  }
+  return false
 }
 
 const getCost = reading => {
@@ -41,13 +57,24 @@ const getYesterdaySum = async url => {
   if (readings.length !== 48) {
     console.log('Warning: Expected 48 readings, found ' + readings.length)
   }
-  const usage = readings.reduce((prev, curr) => prev + curr.consumption, 0) 
-  const cost = readings.reduce((prev, curr) => prev + getCost(curr), 0)
-  console.log('usage', usage)
-  console.log('cost', cost)
+  const dayReadings = readings.filter(reading => !isNight(reading.interval_start))
+  const nightReadings = readings.filter(reading => isNight(reading.interval_start))
+
+  const dayUsage = dayReadings.reduce((prev, curr) => prev + curr.consumption, 0) 
+  const dayCost = dayReadings.reduce((prev, curr) => prev + getCost(curr), 0)
+  console.log('dayUsage', dayUsage)
+  console.log('dayCost', dayCost)
+
+  const nightUsage = nightReadings.reduce((prev, curr) => prev + curr.consumption, 0) 
+  const nightCost = nightReadings.reduce((prev, curr) => prev + getCost(curr), 0)
+  console.log('nightUsage', nightCost)
+  console.log('nightCost', nightCost)
+
   return {
-    usage,
-    cost
+    dayUsage,
+    dayCost,
+    nightUsage,
+    nightCost
   }
   // return Math.round(100 * readings.reduce((prev, curr) => prev + curr.consumption, 0)) / 100
 }
@@ -58,8 +85,10 @@ export async function getServerSideProps (context) {
 
   return {
     props: {
-      importUsage: imp.usage,
-      importCost: imp.cost,
+      importDayUsage: imp.dayUsage,
+      importDayCost: imp.dayCost,
+      importNightUsage: imp.nightUsage,
+      importNightCost: imp.nightCost,
       exp
     }
   }
@@ -68,7 +97,7 @@ export async function getServerSideProps (context) {
 const formatSterling = pounds => pounds ? ('£' + pounds.toFixed(2 )) : ''
 const formatKWh = kwh => kwh.toFixed(2)
 
-export default function Energy ({ importUsage, importCost, exp }) {
+export default function Energy ({ importDayUsage, importDayCost, importNightUsage, importNightCost, exp }) {
 
   return (
     <>
@@ -81,9 +110,20 @@ export default function Energy ({ importUsage, importCost, exp }) {
         <meta name="theme-color" content="#262626" />
         <link rel="icon" href="/Energy.svg" />
       </Head>
-      <main>
+      <main className={styles.main}>
         <h1>Yesterday's Energy</h1>
-        <h2>Electricity import: {formatKWh(importUsage)} kWh, {formatSterling(importCost / 100)}</h2>
+        <h2>Electricity import:</h2>
+        <table className={styles.table}>
+        <thead>
+            <tr><th></th><th>kWh</th><th>Cost</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>Day</th><td>{formatKWh(importDayUsage)}</td><td>{formatSterling(importDayCost / 100)}</td></tr>
+            <tr><th>Night</th><td>{formatKWh(importNightUsage)}</td><td>{formatSterling(importNightCost / 100)}</td></tr>
+            <tr><th>Standing</th><td></td><td>{formatSterling(STANDING_CHARGE / 100)}</td></tr>
+            <tr><th>Total</th><td>{formatKWh(importDayUsage + importNightUsage)}</td><td><strong>{formatSterling((importDayCost + importNightCost + STANDING_CHARGE) / 100)}</strong></td></tr>
+          </tbody>
+        </table>
         { /* <p>Export: {exp} kWh</p> */ }
       </main>
     </>
