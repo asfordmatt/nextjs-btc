@@ -1,4 +1,5 @@
 import React from 'react'
+import Head from 'next/head'
 
 const DAY_RATE = 41.30
 const NIGHT_RATE = 14.13
@@ -71,9 +72,20 @@ export default function Energy ({ importUsage, importCost, exp }) {
 
   return (
     <>
-      <h1>Yesterday's Energy</h1>
-      <h2>Electricity import: {formatKWh(importUsage)} kWh, {formatSterling(importCost / 100)}</h2>
-      { /* <p>Export: {exp} kWh</p> */ }
+      <Head>
+        <title>Yesterday's Energy</title>
+        <meta name="description" content="Yesterday's Energy" />
+        <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=2.0, width=device-width" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="theme-color" content="#262626" />
+        <link rel="icon" href="/Energy.svg" />
+      </Head>
+      <main>
+        <h1>Yesterday's Energy</h1>
+        <h2>Electricity import: {formatKWh(importUsage)} kWh, {formatSterling(importCost / 100)}</h2>
+        { /* <p>Export: {exp} kWh</p> */ }
+      </main>
     </>
   )
 }
