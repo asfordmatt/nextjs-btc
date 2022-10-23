@@ -53,6 +53,7 @@ const getYesterdaySum = async url => {
   const readings = data.results.filter(reading => {
     return (new Date(reading.interval_start).getDate() == yesterday)
   })
+  // console.log('all readings', data.results)
   console.log('num readings: ', readings.length)
   if (readings.length !== 48) {
     console.log('Warning: Expected 48 readings, found ' + readings.length)
@@ -74,7 +75,8 @@ const getYesterdaySum = async url => {
     dayUsage,
     dayCost,
     nightUsage,
-    nightCost
+    nightCost,
+    readingCount: readings.length
   }
   // return Math.round(100 * readings.reduce((prev, curr) => prev + curr.consumption, 0)) / 100
 }
@@ -89,6 +91,7 @@ export async function getServerSideProps (context) {
       importDayCost: imp.dayCost,
       importNightUsage: imp.nightUsage,
       importNightCost: imp.nightCost,
+      importReadingCount: imp.readingCount,
       exp
     }
   }
@@ -97,7 +100,7 @@ export async function getServerSideProps (context) {
 const formatSterling = pounds => pounds ? ('£' + pounds.toFixed(2 )) : ''
 const formatKWh = kwh => kwh.toFixed(2)
 
-export default function Energy ({ importDayUsage, importDayCost, importNightUsage, importNightCost, exp }) {
+export default function Energy ({ importDayUsage, importDayCost, importNightUsage, importNightCost, importReadingCount, exp }) {
 
   return (
     <>
@@ -113,6 +116,11 @@ export default function Energy ({ importDayUsage, importDayCost, importNightUsag
       <main className={styles.main}>
         <h1>Yesterday's Energy</h1>
         <h2>Electricity import:</h2>
+        {
+          (importReadingCount < 48) && (
+            <p>Warning: Missing readings (found: {importReadingCount})</p>
+          )
+        }
         <table className={styles.table}>
         <thead>
             <tr><th></th><th>kWh</th><th>Cost</th></tr>
