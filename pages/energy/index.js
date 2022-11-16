@@ -17,14 +17,16 @@ const AUTH = {
 
 const isNight = ts => {
   const start = new Date(ts)
+  // console.log('start', start)
   const hour = start.getHours()
   const min = start.getMinutes()
   if (((hour === 0) && (min === 30))
-    || ((hour >= 1) && (hour < 4))
-    || ((hour === 4) && (min === 0))) {
+    || ((hour >= 1) && (hour < 7))
+    || ((hour === 7) && (min === 0))) {
     // console.log('night')
     return true
   }
+  // console.log('day')
   return false
 }
 
@@ -34,7 +36,7 @@ const getCost = reading => {
   const hour = start.getHours()
   const min = start.getMinutes()
   if (((hour === 0) && (min === 30))
-    || ((hour >= 1) && (hour < 4))
+    || ((hour >= 1) && (hour < 7))
     || ((hour === 4) && (min === 0))) {
     // console.log('night')
     return reading.consumption * NIGHT_RATE
